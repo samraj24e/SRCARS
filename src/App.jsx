@@ -8,25 +8,16 @@ import BuySell from './pages/BuySell';
 import Services from './pages/Services';
 import Contact from './pages/Contact';
 import Login from './pages/Login';
+import AdminDashboard from './pages/AdminDashboard';
 import WhatsAppButton from './components/WhatsAppButton';
-import { AuthProvider } from './context/AuthContext';
-import suvImage from './assets/images/suv.png';
-import sedanImage from './assets/images/sedan.png';
+import { AuthProvider, useAuth } from './context/AuthContext';
+import { initialCars } from './data/initialCars';
 import './App.css';
-
-const DEFAULT_CARS = [
-  { id: 1, model: 'BMW X5 xDrive40i', year: '2022', fuel: 'Petrol', type: 'SUV', image: suvImage },
-  { id: 2, model: 'Audi A6 Premium Plus', year: '2021', fuel: 'Diesel', type: 'Sedan', image: sedanImage },
-  { id: 3, model: 'Toyota Fortuner Legender', year: '2023', fuel: 'Diesel', type: 'SUV', image: suvImage },
-  { id: 4, model: 'Mercedes-Benz E-Class', year: '2020', fuel: 'Petrol', type: 'Sedan', image: sedanImage },
-  { id: 5, model: 'Range Rover Velar', year: '2022', fuel: 'Diesel', type: 'SUV', image: suvImage },
-  { id: 6, model: 'Honda Civic RS', year: '2021', fuel: 'Petrol', type: 'Sedan', image: sedanImage },
-];
 
 function App() {
   const [cars, setCars] = React.useState(() => {
     const saved = localStorage.getItem('srcars_inventory');
-    return saved ? JSON.parse(saved) : DEFAULT_CARS;
+    return saved ? JSON.parse(saved) : initialCars;
   });
 
   React.useEffect(() => {
@@ -53,7 +44,7 @@ function App() {
               <Route path="/buy-sell" element={<BuySell />} />
               <Route path="/services" element={<Services />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/admin" element={<Login />} />
+              <Route path="/admin" element={<AdminRoute />} />
             </Routes>
           </main>
           <Footer />
@@ -63,5 +54,10 @@ function App() {
     </AuthProvider>
   );
 }
+
+const AdminRoute = () => {
+  const { isLoggedIn } = useAuth();
+  return isLoggedIn ? <AdminDashboard /> : <Login />;
+};
 
 export default App;

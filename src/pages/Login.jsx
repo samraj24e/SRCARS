@@ -11,15 +11,10 @@ const Login = () => {
   const { login, isAdmin } = useAuth();
   const navigate = useNavigate();
 
-  // If already admin, redirect to inventory
-  if (isAdmin) {
-    navigate('/inventory');
-  }
-
   const handleSubmit = (e) => {
     e.preventDefault();
     if (login(password)) {
-      navigate('/inventory');
+      // Logic handled by App.jsx conditional route
     } else {
       setError('Invalid Admin Password. Please try again.');
     }

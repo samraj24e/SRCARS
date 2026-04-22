@@ -11,14 +11,21 @@ const Login = () => {
   const { login, isAdmin } = useAuth();
   const navigate = useNavigate();
 
+
   const handleSubmit = (e) => {
     e.preventDefault();
     if (login(password)) {
-      // Logic handled by App.jsx conditional route
+      // Navigation will be handled by useEffect below
     } else {
       setError('Invalid Admin Password. Please try again.');
     }
   };
+
+  React.useEffect(() => {
+    if (isAdmin) {
+      navigate('/admin');
+    }
+  }, [isAdmin, navigate]);
 
   return (
     <div className="login-page">

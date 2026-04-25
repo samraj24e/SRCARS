@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Link, useLocation } from 'react-router-dom';
-import { Menu, X, Car, Phone, LogOut } from 'lucide-react';
+import { Menu, X, Phone, LogOut } from 'lucide-react';
 import { useAuth } from '../context/AuthContext';
 import './Navbar.css';
 
@@ -35,7 +35,7 @@ const Navbar = () => {
           <Link to="/buy-sell" className={location.pathname === '/buy-sell' ? 'active' : ''}>Buy/Sell</Link>
           <Link to="/services" className={location.pathname === '/services' ? 'active' : ''}>Services</Link>
           <Link to="/contact" className={location.pathname === '/contact' ? 'active' : ''}>Contact</Link>
-          
+
           {isAdmin ? (
             <button onClick={logout} className="btn btn-outline nav-logout">
               <LogOut size={18} /> Logout

@@ -5,7 +5,7 @@ import { useAuth } from '../context/AuthContext';
 import { Link, useNavigate } from 'react-router-dom';
 import './AdminDashboard.css';
 
-const AdminDashboard = () => {
+const AdminDashboard = ({ cars = [] }) => {
   const { logout } = useAuth();
   const navigate = useNavigate();
 
@@ -15,9 +15,9 @@ const AdminDashboard = () => {
   };
 
   const stats = [
-    { label: "Total Vehicles", value: "24", icon: <ShoppingCart />, color: "#e50914" },
-    { label: "Monthly Leads", value: "158", icon: <TrendingUp />, color: "#4caf50" },
-    { label: "Active Customers", value: "850+", icon: <Users />, color: "#2196f3" }
+    { label: "Total Vehicles", value: cars.length.toString(), icon: <ShoppingCart />, color: "#e50914" },
+    { label: "Petrol Cars", value: cars.filter(c => c.fuel?.toLowerCase() === 'petrol').length.toString(), icon: <TrendingUp />, color: "#4caf50" },
+    { label: "Diesel Cars", value: cars.filter(c => c.fuel?.toLowerCase() === 'diesel').length.toString(), icon: <Users />, color: "#2196f3" }
   ];
 
   return (

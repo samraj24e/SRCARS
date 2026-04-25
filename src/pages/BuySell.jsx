@@ -12,16 +12,51 @@ const BuySell = () => {
   });
   const [submitted, setSubmitted] = useState(false);
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    // Simulate API call
-    console.log('Form data:', formData);
-    setSubmitted(true);
-    setTimeout(() => setSubmitted(false), 5000);
+    const formspreeId = import.meta.env.VITE_FORMSPREE_ID;
+
+    if (!formspreeId || formspreeId === 'YOUR_FORMSPREE_ID_HERE') {
+      alert("Formspree ID is not set! Please check your .env file.");
+      return;
+    }
+
+    try {
+      const endpoint = formspreeId.includes('https') ? formspreeId : `https://formspree.io/f/${formspreeId}`;
+      const response = await fetch(endpoint, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Accept': 'application/json'
+        },
+        body: JSON.stringify(formData)
+      });
+
+      if (response.ok) {
+        setSubmitted(true);
+        setFormData({ name: '', phone: '', carDetails: '', message: '' });
+        setTimeout(() => setSubmitted(false), 5000);
+      } else {
+        alert("Oops! There was a problem submitting your form.");
+      }
+    } catch (error) {
+      console.error('Error submitting form:', error);
+      alert("Error sending message. Please try again later.");
+    }
   };
 
   const handleChange = (e) => {
     setFormData({ ...formData, [e.target.name]: e.target.value });
+  };
+
+  const handleWhatsAppSubmit = (e) => {
+    e.preventDefault();
+    if (!formData.name || !formData.phone) {
+      alert("Please fill in your name and phone number first.");
+      return;
+    }
+    const text = `*New Quote Request*%0A%0A*Name:* ${formData.name}%0A*Phone:* ${formData.phone}%0A*Car Details:* ${formData.carDetails}%0A*Message:* ${formData.message}`;
+    window.open(`https://wa.me/8610362451?text=${text}`, '_blank');
   };
 
   return (
@@ -115,8 +150,17 @@ const BuySell = () => {
                       onChange={handleChange}
                     ></textarea>
                   </div>
-                  <button type="submit" className="btn btn-primary w-full">
-                    Submit Details <Send size={18} />
+                  <button type="submit" className="btn btn-primary w-full" style={{ marginBottom: '1rem' }}>
+                    Get Quote via Email <Send size={18} />
+                  </button>
+                  
+                  <button 
+                    type="button" 
+                    className="btn btn-outline w-full" 
+                    onClick={handleWhatsAppSubmit}
+                    style={{ borderColor: '#25D366', color: '#25D366' }}
+                  >
+                    Get Quote via WhatsApp
                   </button>
                 </form>
               )}

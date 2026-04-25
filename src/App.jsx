@@ -110,7 +110,7 @@ function App() {
               <Route path="/buy-sell" element={<BuySell />} />
               <Route path="/services" element={<Services />} />
               <Route path="/contact" element={<Contact />} />
-              <Route path="/admin" element={<AdminRoute />} />
+              <Route path="/admin" element={<AdminRoute cars={cars} />} />
             </Routes>
           </main>
           <Footer />
@@ -121,9 +121,9 @@ function App() {
   );
 }
 
-const AdminRoute = () => {
-  const { isLoggedIn } = useAuth();
-  return isLoggedIn ? <AdminDashboard /> : <Login />;
+const AdminRoute = ({ cars }) => {
+  const { isAdmin } = useAuth();
+  return isAdmin ? <AdminDashboard cars={cars} /> : <Login />;
 };
 
 export default App;
